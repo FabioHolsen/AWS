@@ -3,7 +3,7 @@
                 $host = "tubasededatos";
                 $user = "admin";
                 $password = "admin123";
-                $database = "alumnos";
+                $database = "productos";
 
         $conexion = mysqli_connect($host,$user,$password,$database);
         if (!$conexion) {
@@ -13,28 +13,28 @@
         }
 
         $conexion = conexion();
-        $result = mysqli_query($conexion, "SELECT * FROM alumnos");
+        $result = mysqli_query($conexion, "SELECT * FROM producto");
 ?>
 
 <HTML>
 <head>
-        <title>Consulta alumnos</title>
+        <title>Consulta productos</title>
 </head>
 <body>
-        <h1>Alumnos</h1>
+        <h1>Productos</h1>
         <table border="1">
         <tr>
                 <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Clase</th>
-                <th>Correo electronico</th>
+                <th>Color</th>
+                <th>Descripcion</th>
+                <th>Precio</th>
         </tr>
 <?php while ($row = mysqli_fetch_assoc($result)): ?>
         <tr>
                 <td><?= htmlspecialchars($row['nombre']) ?></td>
-                <td><?= htmlspecialchars($row['apellido1'] . " " . $row['apellido2']) ?></td>
-                <td><?= htmlspecialchars($row['clase']) ?></td>
-                <td><?= htmlspecialchars($row['email']) ?></td>
+                <td><?= htmlspecialchars($row['color']) ?></td>
+                <td><?= htmlspecialchars($row['descripcion']) ?></td>
+                <td><?= htmlspecialchars($row['precio']) ?></td>
 
         </tr>
 <?php endwhile; ?>
