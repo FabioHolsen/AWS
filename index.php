@@ -41,5 +41,7 @@
         </tr>
 <?php endwhile; ?>
 </table>
+<h1>Imagen de bucket S3</h1>
+<img src="https://proyectofinal-holsenmalavia.s3.us-east-1.amazonaws.com/gestoria-pyme.jpg">
 </body>
 </HTML>
