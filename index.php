@@ -24,6 +24,7 @@
         <h1>Productos</h1>
         <table border="1">
         <tr>
+                <th>ID</th>
                 <th>Nombre</th>
                 <th>Color</th>
                 <th>Descripcion</th>
@@ -31,6 +32,7 @@
         </tr>
 <?php while ($row = mysqli_fetch_assoc($result)): ?>
         <tr>
+                <td><?= htmlspecialchars($row['ID']) ?></td>
                 <td><?= htmlspecialchars($row['nombre']) ?></td>
                 <td><?= htmlspecialchars($row['color']) ?></td>
                 <td><?= htmlspecialchars($row['descripcion']) ?></td>
