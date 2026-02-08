@@ -1,6 +1,6 @@
 <?php
         function conexion(){
-                $host = "tubasededatos";
+                $host = "basedatos.cluster-ro-cpkgio2u8zmx.us-east-1.rds.amazonaws.com";
                 $user = "admin";
                 $password = "admin123";
                 $database = "productos";
