@@ -49,7 +49,7 @@ $result = mysqli_query($conexion, "SELECT * FROM producto");
             <td><?= htmlspecialchars($row['nombre']) ?></td>
             <td><?= htmlspecialchars($row['color']) ?></td>
             <td><?= htmlspecialchars($row['descripcion']) ?></td>
-            <td><?= htmlspecialchars($row['precio']) ?></td>
+            <td><?= number_format($row['precio'], 2, ',', '.') ?> €</td>
         </tr>
         <?php endwhile; ?>
     </table>
