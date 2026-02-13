@@ -1,9 +1,9 @@
 <?php
 function conexion(){
-    $host = "basedatos.cluster-ro-cpkgio2u8zmx.us-east-1.rds.amazonaws.com";
-    $user = "admin";
-    $password = "admin123";
-    $database = "productos";
+    $host = getenv('DB_HOST');
+    $user = getenv('DB_USER');
+    $password = getenv('DB_PASS');
+    $database = getenv('DB_NAME');
 
     $conexion = mysqli_connect($host, $user, $password, $database);
     if (!$conexion) {
