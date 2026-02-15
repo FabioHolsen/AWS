@@ -1,38 +1,19 @@
 <?php
-$error = null;
-$result = null;
-
 function conexion(){
     $host = getenv('DB_HOST');
     $user = getenv('DB_USER');
     $password = getenv('DB_PASS');
     $database = getenv('DB_NAME');
-    $port = 3306;
-    $timeout = 2; // segundos
 
-    $conexion = mysqli_init();
-    mysqli_options($conexion, MYSQLI_OPT_CONNECT_TIMEOUT, $timeout);
-
-    if (!mysqli_real_connect($conexion, $host, $user, $password, $database, $port)) {
-        return false;
+    $conexion = mysqli_connect($host, $user, $password, $database);
+    if (!$conexion) {
+        die("Error de conexión: " . mysqli_connect_error());
     }
-
     return $conexion;
 }
 
 $conexion = conexion();
-
-if (!$conexion) {
-    $error = "Servicio temporalmente no disponible. Inténtelo más tarde.";
-    error_log("Error de conexión: " . mysqli_connect_error());
-} else {
-    $result = mysqli_query($conexion, "SELECT * FROM producto");
-
-    if (!$result) {
-        $error = "Error al obtener los productos.";
-        error_log("Error en la consulta: " . mysqli_error($conexion));
-    }
-}
+$result = mysqli_query($conexion, "SELECT * FROM producto");
 ?>
 
 <!DOCTYPE html>
@@ -53,42 +34,29 @@ if (!$conexion) {
 <main>
     <h2>Listado</h2>
 
-    <!-- Mostrar siempre el mensaje de error si existe -->
-    <?php if ($error): ?>
-        <div class="error">
-            <?= htmlspecialchars($error) ?>
-        </div>
-    <?php endif; ?>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Color</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+        </tr>
 
-    <!-- Mostrar la tabla solo si no hay error -->
-    <?php if (!$error && $result && mysqli_num_rows($result) > 0): ?>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Color</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-            </tr>
-
-            <?php while ($row = mysqli_fetch_assoc($result)): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['ID']) ?></td>
-                <td><?= htmlspecialchars($row['nombre']) ?></td>
-                <td><?= htmlspecialchars($row['color']) ?></td>
-                <td><?= htmlspecialchars($row['descripcion']) ?></td>
-                <td><?= number_format($row['precio'], 2, ',', '.') ?> €</td>
-            </tr>
-            <?php endwhile; ?>
-        </table>
-    <?php elseif (!$error): ?>
-        <p>No hay productos disponibles.</p>
-    <?php endif; ?>
+        <?php while ($row = mysqli_fetch_assoc($result)): ?>
+        <tr>
+            <td><?= htmlspecialchars($row['ID']) ?></td>
+            <td><?= htmlspecialchars($row['nombre']) ?></td>
+            <td><?= htmlspecialchars($row['color']) ?></td>
+            <td><?= htmlspecialchars($row['descripcion']) ?></td>
+            <td><?= number_format($row['precio'], 2, ',', '.') ?> €</td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
 
     <div class="imagen">
         <img src="https://proyectofinal-holsenmalavia.s3.us-east-1.amazonaws.com/gestoria-pyme.jpg" alt="Imagen S3">
     </div>
-
 </main>
 
 <footer>
@@ -97,13 +65,3 @@ if (!$conexion) {
 
 </body>
 </html>
-
-<?php
-// Liberar recursos y cerrar conexión si se creó
-if ($result) {
-    mysqli_free_result($result);
-}
-if ($conexion) {
-    mysqli_close($conexion);
-}
-?>
