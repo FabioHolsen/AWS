@@ -7,10 +7,13 @@ function conexion(){
     $user = getenv('DB_USER');
     $password = getenv('DB_PASS');
     $database = getenv('DB_NAME');
+    $port = 3306;
+    $timeout = 2; // segundos
 
-    $conexion = mysqli_connect($host, $user, $password, $database);
+    $conexion = mysqli_init();
+    mysqli_options($conexion, MYSQLI_OPT_CONNECT_TIMEOUT, $timeout);
 
-    if (!$conexion) {
+    if (!mysqli_real_connect($conexion, $host, $user, $password, $database, $port)) {
         return false;
     }
 
