@@ -55,7 +55,7 @@ $result = mysqli_query($conexion, "SELECT * FROM producto");
     </table>
 
     <div class="imagen">
-        <img src="https://proyectofinal-holsenmalavia.s3.us-east-1.amazonaws.com/gestoria-pyme.jpg" alt="Imagen S3">
+        <img src="https://proyectofinal-holsenmalavia.s3.us-east-1.amazonaws.com/media/gestoria-pyme.jpg" alt="Imagen S3">
     </div>
 </main>
 
