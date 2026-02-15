@@ -23,7 +23,6 @@ if (!$conexion) {
     $error = "Servicio temporalmente no disponible. Inténtelo más tarde.";
     error_log("Error de conexión: " . mysqli_connect_error());
 } else {
-    
     $result = mysqli_query($conexion, "SELECT * FROM producto");
 
     if (!$result) {
@@ -51,13 +50,15 @@ if (!$conexion) {
 <main>
     <h2>Listado</h2>
 
+    <!-- Mostrar siempre el mensaje de error si existe -->
     <?php if ($error): ?>
-        
         <div class="error">
             <?= htmlspecialchars($error) ?>
         </div>
-    <?php elseif ($result && mysqli_num_rows($result) > 0): ?>
+    <?php endif; ?>
 
+    <!-- Mostrar la tabla solo si no hay error -->
+    <?php if (!$error && $result && mysqli_num_rows($result) > 0): ?>
         <table>
             <tr>
                 <th>ID</th>
@@ -76,11 +77,8 @@ if (!$conexion) {
                 <td><?= number_format($row['precio'], 2, ',', '.') ?> €</td>
             </tr>
             <?php endwhile; ?>
-
         </table>
-
-    <?php else: ?>
-        
+    <?php elseif (!$error): ?>
         <p>No hay productos disponibles.</p>
     <?php endif; ?>
 
@@ -98,6 +96,7 @@ if (!$conexion) {
 </html>
 
 <?php
+// Liberar recursos y cerrar conexión si se creó
 if ($result) {
     mysqli_free_result($result);
 }
