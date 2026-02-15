@@ -1,4 +1,6 @@
 <?php
+$error = null;
+
 function conexion(){
     $host = getenv('DB_HOST');
     $user = getenv('DB_USER');
@@ -6,14 +8,27 @@ function conexion(){
     $database = getenv('DB_NAME');
 
     $conexion = mysqli_connect($host, $user, $password, $database);
+
     if (!$conexion) {
-        die("Error de conexión: " . mysqli_connect_error());
+        return false;
     }
+
     return $conexion;
 }
 
 $conexion = conexion();
-$result = mysqli_query($conexion, "SELECT * FROM producto");
+
+if (!$conexion) {
+    $error = "Servicio temporalmente no disponible. Inténtelo más tarde.";
+    error_log("Error de conexión: " . mysqli_connect_error());
+} else {
+    $result = mysqli_query($conexion, "SELECT * FROM producto");
+
+    if (!$result) {
+        $error = "Error al obtener los productos.";
+        error_log("Error en la consulta: " . mysqli_error($conexion));
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -33,6 +48,12 @@ $result = mysqli_query($conexion, "SELECT * FROM producto");
 
 <main>
     <h2>Listado</h2>
+
+    <?php if ($error): ?>
+        <div class="error">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php else: ?>
 
     <table>
         <tr>
@@ -54,6 +75,8 @@ $result = mysqli_query($conexion, "SELECT * FROM producto");
         <?php endwhile; ?>
     </table>
 
+    <?php endif; ?>
+
     <div class="imagen">
         <img src="https://proyectofinal-holsenmalavia.s3.us-east-1.amazonaws.com/gestoria-pyme.jpg" alt="Imagen S3">
     </div>
@@ -65,3 +88,12 @@ $result = mysqli_query($conexion, "SELECT * FROM producto");
 
 </body>
 </html>
+
+<?php
+if (isset($result) && $result) {
+    mysqli_free_result($result);
+}
+if ($conexion) {
+    mysqli_close($conexion);
+}
+?>
